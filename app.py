@@ -49,6 +49,10 @@ def checkImage():
             openai.api_key = CONSTANTS.api_key
             decrypted_message = lbs_decrypter(image_file)
             response_text = make_response(decrypted_message)
+
+            if(decrypted_message == 'No Content!'):
+               return render_template('checkImage.html', message = None)
+            
             response = openai.Completion.create(
                 engine="gpt-3.5-turbo-instruct",
                 prompt=f"**Threat Score: [Enter Threat Score Here]**\n\nDescription: \"{decrypted_message}\"\n\n",
@@ -57,7 +61,7 @@ def checkImage():
             word2cev_model_path = CONSTANTS.word2vec
             word2vec_model = KeyedVectors.load_word2vec_format(word2cev_model_path, binary=True, limit=200000)
             def categorize_text(description, word2vec_model):
-                categories = ['Malware', 'Exploits', 'Phishing', 'Denial of Service (DoS) Attacks', 'Insider Threats', 'Safe']
+                categories = ['Malware', 'Exploits', 'Phishing', 'Insider Threats', 'Safe to download']
                 category_scores = defaultdict(float)
                 words_in_model = [word for word in description.split() if word in word2vec_model]
                 if words_in_model:
