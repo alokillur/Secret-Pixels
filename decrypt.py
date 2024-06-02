@@ -12,11 +12,10 @@ def lbs_decrypter(image_file):
 
     def get_char():
         new_byte = ''
-
         for bit in range(8):
             byte = image_file.read(1)
-
             new_byte += str(ord(byte) & 0x01)
+            
         n = int(new_byte, 2)
         desteg_char = chr(n)
         return desteg_char
@@ -31,8 +30,15 @@ def lbs_decrypter(image_file):
             s_sz += curr_ch
             curr_ch = get_char()
 
+        if not s_sz.isdigit():
+            return False
+
+        if s_sz == '0':
+            return False
+
         if s_sz:
             number_of_chars_in_text = int(s_sz)
+            return True
 
     def read_stega_text():
         nonlocal original_text
@@ -41,7 +47,9 @@ def lbs_decrypter(image_file):
             original_text += get_char()
             decoded_chars += 1
 
-    get_text_size()
+    if not get_text_size():
+        return "No Content!"
+
     read_stega_text()
 
     return original_text
