@@ -1,13 +1,8 @@
-from flask import Flask, render_template, request, send_file, make_response
-import os
-import CONSTANTS
+from flask import Flask, render_template, request, make_response
 from encrypt import lsb_encrypter
 from decrypt import lbs_decrypter
 
 app = Flask(__name__)
-
-HEADER_SIZE = CONSTANTS.HEADER_SIZE
-DELIMITER = CONSTANTS.DELIMITER
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
