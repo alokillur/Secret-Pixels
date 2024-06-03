@@ -1,7 +1,7 @@
 import CONSTANTS
 
-HEADER_SIZE = CONSTANTS.HEADER_SIZE
-DELIMITER = CONSTANTS.DELIMITER
+HEADER_SIZE = 54  
+DELIMITER = "$"
 
 def lsb_encrypter(text_to_hide, image_file, steg_image_file):
     image_byte_counter = 0

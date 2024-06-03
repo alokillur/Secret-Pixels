@@ -1,7 +1,7 @@
 import CONSTANTS
 
-HEADER_SIZE = CONSTANTS.HEADER_SIZE
-DELIMITER = CONSTANTS.DELIMITER
+HEADER_SIZE = 54  
+DELIMITER = "$"
 
 def lbs_decrypter(image_file):
     number_of_chars_in_text = 0

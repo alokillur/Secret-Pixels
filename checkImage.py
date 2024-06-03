@@ -5,6 +5,9 @@ from collections import defaultdict
 from gensim.models import KeyedVectors
 from decrypt import lbs_decrypter
 
+HEADER_SIZE = 54  
+DELIMITER = "$"
+
 def checkImageContent(image_file):
     openai.api_key = CONSTANTS.api_key
     decrypted_message = lbs_decrypter(image_file)
