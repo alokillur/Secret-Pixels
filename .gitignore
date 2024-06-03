@@ -1,5 +1,5 @@
 __pycache__/
 static/
-CONSTANTS.py
+# CONSTANTS.py
 GoogleNews-vectors-negative300.bin
 test.py
