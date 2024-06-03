@@ -1,5 +1,4 @@
 import CONSTANTS
-
 HEADER_SIZE = 54  
 DELIMITER = "$"
 

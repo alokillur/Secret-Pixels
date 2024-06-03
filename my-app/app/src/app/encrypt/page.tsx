@@ -1,6 +1,32 @@
-import { Button } from "@/components/ui/button"
+"use client"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
-export default function enc() {
+export default function Enc() {
+  const [encryptedImage, setEncryptedImage] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    try {
+      const response = await fetch("http://localhost:5000/encrypt", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      setEncryptedImage(imageUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="bg-gray-100 dark:bg-gray-950 min-h-screen flex flex-col items-center justify-center px-4 py-12 md:px-6 lg:px-8">
       <div className="max-w-2xl w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden">
@@ -9,14 +35,15 @@ export default function enc() {
           <p className="text-gray-600 dark:text-gray-400 mb-8">
             Encrypt your text and images with our advanced encryption tool.
           </p>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" htmlFor="text">
                 Text to Encrypt
               </label>
               <textarea
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                className="p-5 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                 id="text"
+                name="text"
                 placeholder="Enter your text here..."
                 rows={4}
               />
@@ -26,7 +53,7 @@ export default function enc() {
                 Image to Encrypt
               </label>
               <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-md p-6">
-                <input accept="image/*" className="sr-only" id="image" type="file" />
+                <input accept="image/*" className="sr-only" id="image" name="image" type="file" />
                 <label
                   className="cursor-pointer text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                   htmlFor="image"
@@ -39,7 +66,7 @@ export default function enc() {
                       strokeWidth={2}
                     />
                   </svg>
-                  <span className="ml-2">Upload Image</span>
+                  <span className="mr-10">Upload Image</span>
                 </label>
               </div>
             </div>
@@ -51,27 +78,35 @@ export default function enc() {
             </Button>
           </form>
         </div>
-        <div className="bg-gray-100 dark:bg-gray-800 p-6 md:p-8 lg:p-10">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Encrypted Output</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <img
-                alt="Encrypted Image"
-                className="w-full h-auto rounded-md"
-                height={300}
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "400/300",
-                  objectFit: "cover",
-                }}
-                width={400}
-              />
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">Encrypted Image</p>
-             </div>
-            
+        {encryptedImage && (
+          <div className="bg-gray-100 dark:bg-gray-800 p-6 md:p-8 lg:p-10">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Encrypted Output</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <img
+                  alt="Encrypted Image"
+                  className="w-full h-auto rounded-md"
+                  height={300}
+                  src={encryptedImage}
+                  style={{
+                    aspectRatio: "400/300",
+                    objectFit: "cover",
+                  }}
+                  width={400}
+                />
+                <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">Encrypted Image</p>
+              </div>
+              <a href={encryptedImage} download="encrypted_image.jpg">
+                <Button
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-600"
+                >
+                  Download Image
+                </Button>
+              </a>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
-  )
+  );
 }

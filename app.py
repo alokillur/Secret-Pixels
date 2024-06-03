@@ -3,10 +3,12 @@ import openai
 import numpy as np
 from flask import Flask, render_template, request, make_response
 from encrypt import lsb_encrypter
+from flask_cors import CORS
 from decrypt import lbs_decrypter
-from checkImage import checkImageContent
+# from checkImage import checkImageContent
 
 app = Flask(__name__)
+CORS(app) 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -39,14 +41,14 @@ def decrypt():
             return response
     return render_template('decrypt.html', message=None)
 
-@app.route('/checkImage', methods=['POST', 'GET'])
-def checkImage():
-    if request.method == 'POST':
-        image_file = request.files['image']
-        if image_file:
-            response = checkImageContent(image_file)
-        return response
-    return render_template('checkImage.html', message=None)
+# @app.route('/checkImage', methods=['POST', 'GET'])
+# def checkImage():
+#     if request.method == 'POST':
+#         image_file = request.files['image']
+#         if image_file:
+#             response = checkImageContent(image_file)
+#         return response
+#     return render_template('checkImage.html', message=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
