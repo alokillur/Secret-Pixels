@@ -1,6 +1,31 @@
-import { Button } from "@/components/ui/button"
+"use client"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
-export default function fe() {
+export default function Fe() {
+  const [decryptedText, setDecryptedText] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    try {
+      const response = await fetch("http://localhost:5000/decrypt", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const text = await response.text();
+      setDecryptedText(text);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-12 md:px-6 md:py-16 lg:py-20">
       <div className="space-y-6 text-center">
@@ -14,7 +39,7 @@ export default function fe() {
       </div>
       <div className="mt-12 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="px-6 py-8 sm:px-10 sm:py-10">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="image">
                 Upload Encrypted Image
@@ -41,22 +66,24 @@ export default function fe() {
             </Button>
           </form>
         </div>
-        <div className="px-6 py-8 sm:px-10 sm:py-10 bg-gray-100 dark:bg-gray-900">
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">Decrypted Text</h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
-              hello alok have yjdbfjdb udfoinsdoif oihoijpof oihoijj 
-              </p>
+        {decryptedText && (
+          <div className="px-6 py-8 sm:px-10 sm:py-10 bg-gray-100 dark:bg-gray-900">
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">Decrypted Text</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
+                  {decryptedText}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
-function UploadIcon(props) {
+function UploadIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -74,5 +101,5 @@ function UploadIcon(props) {
       <polyline points="17 8 12 3 7 8" />
       <line x1="12" x2="12" y1="3" y2="15" />
     </svg>
-  )
+  );
 }
