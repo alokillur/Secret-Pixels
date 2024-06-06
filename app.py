@@ -3,6 +3,7 @@ from flask_cors import CORS
 from decrypt import lbs_decrypter
 from encrypt import lsb_encrypter
 from checkImage import checkImageContent
+from checkLink import checkSite
 
 app = Flask(__name__)
 CORS(app)
@@ -46,6 +47,15 @@ def checkImage():
             response = checkImageContent(image_file)
         return response
     return render_template('checkImage.html', message=None)
+
+@app.route('/checkLink', methods = ['POST', 'GET'])
+def checkLink():
+    if request.method == 'POST':
+        website = request.form['text']
+        if website:
+            response = checkSite(website)
+            return response
+    return render_template('checkLink.html', message=None)
 
 if __name__ == '__main__':
     app.run(debug=True)

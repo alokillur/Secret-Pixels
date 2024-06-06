@@ -4,11 +4,9 @@ import CONSTANTS
 
 api_key = CONSTANTS.api_key
 
-website_name = input('Enter the Website: ')
-
 def checkSite(website):
    if website == "":
-       return "Please Enter the website nane!"
+       return "Please Enter the website Name!"
    else :
        openai.api_key = api_key
        response = openai.Completion.create(
@@ -17,8 +15,3 @@ def checkSite(website):
            max_tokens = 200
        ) 
        return response.choices[0].text.strip()
-
-
-if __name__ == '__main__':
-    result = checkSite(website_name)
-    print(result)
