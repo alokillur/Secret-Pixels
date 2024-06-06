@@ -38,14 +38,7 @@ def decrypt():
             return response
     return render_template('decrypt.html', message=None)
 
-@app.route('/checkImage', methods=['POST', 'GET'])
-def checkImage():
-    if request.method == 'POST':
-        image_file = request.files['image']
-        if image_file:
-            response = checkImageContent(image_file)
-        return response
-    return render_template('checkImage.html', message=None)
+#
 
 if __name__ == '__main__':
     app.run(debug=True)
