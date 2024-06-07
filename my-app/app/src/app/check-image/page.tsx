@@ -4,8 +4,12 @@ import { Button } from "@/components/ui/button";
 
 export default function CheckImage() {
   const [checkResult, setCheckResult] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -23,6 +27,21 @@ export default function CheckImage() {
       setCheckResult(text);
     } catch (error) {
       console.error("Error:", error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+        setUploadStatus('Image uploaded successfully!');
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -45,23 +64,38 @@ export default function CheckImage() {
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
-                  <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="flex text-sm text-gray-600 dark:text-gray-400">
-                    <label
-                      className="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                      htmlFor="image"
-                    >
-                      <span>Upload a file</span>
-                      <input className="sr-only" id="image" name="image" type="file" />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 10MB</p>
+                  {imagePreview ? (
+                    <img src={imagePreview} className="mx-auto h-48 w-auto" alt="Image Preview" />
+                  ) : (
+                    <>
+                      <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
+                      <div className="flex text-sm text-gray-600 dark:text-gray-400">
+                        <label
+                          className="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                          htmlFor="image"
+                        >
+                          <span>Upload a file</span>
+                          <input
+                            className="sr-only"
+                            id="image"
+                            name="image"
+                            type="file"
+                            onChange={handleImageChange}
+                          />
+                        </label>
+                        <p className="pl-1">or drag and drop</p>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 10MB</p>
+                    </>
+                  )}
                 </div>
               </div>
+              {uploadStatus && (
+                <p className="text-green-600 dark:text-green-400">{uploadStatus}</p>
+              )}
             </div>
             <Button className="w-full" type="submit">
-              Check Image
+              {loading ? 'Checking Image...' : 'Check Image'}
             </Button>
           </form>
         </div>

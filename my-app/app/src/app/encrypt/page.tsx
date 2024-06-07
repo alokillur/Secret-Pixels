@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 
 export default function Enc() {
   const [encryptedImage, setEncryptedImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -24,6 +27,15 @@ export default function Enc() {
       setEncryptedImage(imageUrl);
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      setImageUploaded(true);
     }
   };
 
@@ -53,12 +65,19 @@ export default function Enc() {
                 Image to Encrypt
               </label>
               <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-md p-6">
-                <input accept="image/*" className="sr-only" id="image" name="image" type="file" />
+                <input
+                  accept="image/*"
+                  className="sr-only"
+                  id="image"
+                  name="image"
+                  type="file"
+                  onChange={handleImageChange}
+                />
                 <label
-                  className="cursor-pointer text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                  className="cursor-pointer text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center"
                   htmlFor="image"
                 >
-                  <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-12 w-12 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                       strokeLinecap="round"
@@ -66,18 +85,22 @@ export default function Enc() {
                       strokeWidth={2}
                     />
                   </svg>
-                  <span className="mr-10">Upload Image</span>
+                  <span>Upload Image</span>
                 </label>
               </div>
+              {imageUploaded && (
+                <p className="text-green-600 dark:text-green-400 mt-2">Image uploaded successfully!</p>
+              )}
             </div>
             <Button
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-600"
               type="submit"
             >
-              Encrypt
+              {loading ? 'Encrypting...' : 'Encrypt'}
             </Button>
           </form>
         </div>
+        
         {encryptedImage && (
           <div className="bg-gray-100 dark:bg-gray-800 p-6 md:p-8 lg:p-10">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Encrypted Output</h2>

@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 export default function Fe() {
   const [decryptedText, setDecryptedText] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -18,6 +21,7 @@ export default function Fe() {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -35,6 +39,9 @@ export default function Fe() {
       setDecryptedText(text);
     } catch (error) {
       console.error("Error:", error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +82,7 @@ export default function Fe() {
               </div>
             </div>
             <Button className="w-full" type="submit">
-              Decrypt Image
+            {loading ? 'Decrypting...' : 'Decrypt'}
             </Button>
           </form>
         </div>
