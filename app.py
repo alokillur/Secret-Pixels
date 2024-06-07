@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, make_response
 from flask_cors import CORS
 from decrypt import lbs_decrypter
 from encrypt import lsb_encrypter
-from checkImage import checkImageContent
+# from checkImage import checkImageContent
 from checkLink import checkSite
 
 app = Flask(__name__)
@@ -41,14 +41,15 @@ def decrypt():
 
 #
 
-@app.route('/checkLink', methods = ['POST', 'GET'])
+@app.route('/checkLink', methods=['POST'])
 def checkLink():
-    if request.method == 'POST':
-        website = request.form['text']
-        if website:
-            response = checkSite(website)
-            return response
-    return render_template('checkLink.html', message=None)
+    data = request.get_json()
+    website = data.get('text', '')
+    if website:
+        response = checkSite(website)
+        return jsonify(response)
+    return jsonify({"message": "No website provided"}), 400
+
 
 if __name__ == '__main__':
     app.run(debug=True)
