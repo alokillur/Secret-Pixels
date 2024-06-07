@@ -1,6 +1,5 @@
 "use client"
 import { useState, FormEvent } from 'react';
-import axios from 'axios';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -10,19 +9,32 @@ type ApiResponse = {
 
 export default function CheckLink() {
   const [website, setWebsite] = useState('');
-  const [result, setResult] = useState<ApiResponse | null>(null);
+  const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    console.log("Submitting...");
 
     try {
-      const response = await axios.post<ApiResponse>('http://localhost:5000/checkLink', { text: website });
-      setResult(response.data);
+      const response = await fetch('http://localhost:5000/checkLink', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: website }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.text();
+      setResult(data);
     } catch (error) {
       console.error('Error checking website:', error);
-      setResult({ message: 'An error occurred. Please try again.' });
+      setResult('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -63,7 +75,7 @@ export default function CheckLink() {
         {result && (
           <div className="text-center mt-4">
             <div className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:border-gray-800">
-              {result.message}
+              {result}
             </div>
           </div>
         )}
