@@ -5,8 +5,8 @@ const chatbot= () => {
       {" "}
       <iframe
         src="http://localhost:8501/"
-        width="1530"
-        height="850"
+        width="1920"
+        height="925"
       ></iframe>{" "}
     </div>
   );

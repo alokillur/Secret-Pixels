@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, jsonify
 from flask_cors import CORS
 from decrypt import lbs_decrypter
 from encrypt import lsb_encrypter
@@ -40,12 +40,15 @@ def decrypt():
     return render_template('decrypt.html', message=None)
 
 @app.route('/checkImage', methods=['POST', 'GET'])
-def checkImage():
+def check_image():
     if request.method == 'POST':
         image_file = request.files['image']
         if image_file:
-            response = checkImageContent(image_file)
-        return response
+            print("Received!")
+            response = checkImageContent(image_file)  
+            return response
+        else:
+            return "Image not received!"
     return render_template('checkImage.html', message=None)
 
 @app.route('/checkLink', methods=['POST'])
