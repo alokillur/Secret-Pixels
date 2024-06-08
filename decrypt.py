@@ -1,5 +1,3 @@
-import CONSTANTS
-
 HEADER_SIZE = 54  
 DELIMITER = "$"
 
@@ -7,19 +5,20 @@ def lbs_decrypter(image_file):
     number_of_chars_in_text = 0
     original_text = ''
 
-    for i in range(HEADER_SIZE):
+    for _ in range(HEADER_SIZE):
         image_file.read(1)
 
     def get_char():
         new_byte = ''
-        for bit in range(8):
+        for _ in range(8):
             byte = image_file.read(1)
-            new_byte += str(ord(byte) & 0x01)
-            
+            if not byte:
+                raise ValueError("Unexpected end of file while reading byte")
+            new_byte += str(ord(byte.decode('latin1')) & 0x01)
+
         n = int(new_byte, 2)
         desteg_char = chr(n)
         return desteg_char
-    
 
     def get_text_size():
         nonlocal number_of_chars_in_text
@@ -47,9 +46,11 @@ def lbs_decrypter(image_file):
             original_text += get_char()
             decoded_chars += 1
 
-    if not get_text_size():
+    try:
+        if not get_text_size():
+            return "No Content!"
+        read_stega_text()
+    except ValueError:
         return "No Content!"
-
-    read_stega_text()
 
     return original_text

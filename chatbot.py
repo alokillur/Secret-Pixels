@@ -12,7 +12,6 @@ st.set_page_config(page_title="🕵️‍♀️ ScamDetect")
 st.title('🕵️‍♀️ ScamDetect')
 st.caption("🕸️ A Scam Detection chatbot")
 
-# Store LLM generated responses in chat rooms
 if "rooms" not in st.session_state:
     st.session_state.rooms = [
         [{"role": "assistant", "content": "Please input your suspicious text."}]
@@ -23,22 +22,18 @@ if "current_room" not in st.session_state:
 
 current_room_messages = st.session_state.rooms[st.session_state.current_room]
 
-# Display or clear chat messages
 for message in current_room_messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-# User-provided input
 if user_input := st.chat_input():
     current_room_messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.write(user_input)
 
-# Initialize the Text Classification Model
 tokenizer = AutoTokenizer.from_pretrained("pippinnie/scam_text_classifier")
 model = TFAutoModelForSequenceClassification.from_pretrained("pippinnie/scam_text_classifier")
 
-# Define a prompt template for the chatbot
 prompt_format = '''[system
 You are a scam text expert who explains things in a clear and concise manner that is easy to understand.
 The first input from the user is a text they are suspicious of being a scam and is sent for a text classifier who provides a label, either scam or safe and the likelihood.
@@ -67,10 +62,8 @@ def clasify_scam(text):
     predicted_class_id = int(tf.math.argmax(logits, axis=-1)[0])
     label = model.config.id2label[predicted_class_id]
 
-    # Apply softmax to get probabilities
     probabilities = tf.nn.softmax(logits, axis=-1)
 
-    # Get the probability of the label
     likelihood = probabilities[0][predicted_class_id].numpy()
 
     return (label, likelihood)
@@ -118,7 +111,6 @@ def get_openai_response(prompt):
     )
     return response.choices[0].text.strip()
 
-# Generate a new response if last message is not from assistant
 if current_room_messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):

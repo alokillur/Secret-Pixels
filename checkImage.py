@@ -4,6 +4,9 @@ import numpy as np
 from collections import defaultdict
 from gensim.models import KeyedVectors
 from decrypt import lbs_decrypter
+from PIL import Image
+
+# test_file = Image.open('C:\\Users\\aloky\\OneDrive\\Desktop\\Secret-Pixels\\Test_Files\\test5.jpg')
 
 HEADER_SIZE = 54  
 DELIMITER = "$"
