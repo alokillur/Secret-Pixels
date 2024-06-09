@@ -68,6 +68,16 @@ word2vec = "path/to/your/downloaded/embedding/file.bin"
  ```sh
     streamlit run chatbot.py
 ```
+## Tech Stacks
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-FF4B4B?style=for-the-badge&logo=openai&logoColor=white)
+![Langchain](https://img.shields.io/badge/Langchain-772CE8?style=for-the-badge&logo=langchain&logoColor=white)
+![Transformers](https://img.shields.io/badge/Transformers-FFAC45?style=for-the-badge&logo=huggingface&logoColor=white)
+
 ## Contributors
 <a href="https://github.com/alokillur/Secret-Pixels/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=alokillur/Secret-Pixels" />
