@@ -69,6 +69,9 @@ word2vec = "path/to/your/downloaded/embedding/file.bin"
     streamlit run chatbot.py
 ```
 ## Contributors
+<a href="https://github.com/alokillur/Secret-Pixels/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=alokillur/Secret-Pixels" />
+</a>
 
 <a href="https://github.com/ashwinbekal/SystemX64/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ashwinbekal/SystemX64" />
