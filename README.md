@@ -14,16 +14,6 @@ To protect users from harmful assaults, the program analyzes URLs that are inser
 ### AI Chatbot for Scam Detection: 
 With the ability to assess the probability of a message being a scam, our chatbot is sophisticated enough to identify and warn consumers about fraudulent schemes by assigning a scam level score.
 
-## Target Audience
-### Private Individuals: 
-People who prioritize privacy and need secure methods to communicate sensitive information.
-### Businesses and Corporations: 
-Companies that handle confidential data and require robust methods to protect against data breaches and cyber threats.
-### Security Professionals:
-Experts in cybersecurity who need advanced tools to detect and prevent phishing and scams.
-### Content Moderators:
-Organizations and platforms aiming to ensure that the visual content shared on their platforms is free from toxic or inappropriate material.
-
 ## Setup Instructions
 
 ### 1. Generate an OpenAI API Key
